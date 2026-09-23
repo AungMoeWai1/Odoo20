@@ -1,3 +1,55 @@
+# services:
+#   odoo_db:
+#     image: pgvector/pgvector:pg17
+#     container_name: postgres17_pgvector
+#     env_file: myenvfile.env
+#     ports:
+#       - "5435:5432"
+#     volumes:
+#       - db_data:/var/lib/postgresql/data
+#     networks:
+#       - odoo-net
+#     restart: unless-stopped
+
+#   odoo:
+#     image: aungmoewai/odoo20:latest
+#     stdin_open: true
+#     tty: true
+#     env_file: myenvfile.env
+#     depends_on:
+#       - odoo_db
+#     ports:
+#       - "8069:8069"
+#     volumes:
+#       - ./custom_addons:/mnt/custom_addons
+#       - ./odoo.conf:/etc/odoo.conf
+#       - ./entrypoint.sh:/entrypoint.sh
+#       - ./logs:/var/logs/odoo
+#       - ./data/filestore:/data/odoo/filestore
+#     networks:
+#       - odoo-net
+
+#   pgadmin4:
+#     image: dpage/pgadmin4
+#     environment:
+#       PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+#       PGADMIN_DEFAULT_PASSWORD: root
+#     ports:
+#       - "5050:80"
+#     volumes:
+#       - pgadmin_data:/var/lib/pgadmin
+#     depends_on:
+#       - odoo_db
+#     networks:
+#       - odoo-net
+
+# volumes:
+#   db_data:
+#   pgadmin_data:
+
+
+# networks:
+#   odoo-net:
 services:
   odoo_db:
     image: pgvector/pgvector:pg17
@@ -10,6 +62,11 @@ services:
     networks:
       - odoo-net
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-odoo20} -d ${POSTGRES_DB:-odoo_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   odoo:
     image: aungmoewai/odoo20:latest
@@ -17,7 +74,8 @@ services:
     tty: true
     env_file: myenvfile.env
     depends_on:
-      - odoo_db
+      odoo_db:
+        condition: service_healthy
     ports:
       - "8069:8069"
     volumes:
@@ -28,6 +86,7 @@ services:
       - ./data/filestore:/data/odoo/filestore
     networks:
       - odoo-net
+    restart: unless-stopped
 
   pgadmin4:
     image: dpage/pgadmin4
@@ -39,14 +98,14 @@ services:
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     depends_on:
-      - odoo_db
+      odoo_db:
+        condition: service_healthy
     networks:
       - odoo-net
 
 volumes:
   db_data:
   pgadmin_data:
-
 
 networks:
   odoo-net:
