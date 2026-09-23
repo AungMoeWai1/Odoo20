@@ -1,13 +1,13 @@
-# Odoo 19 Dockerized Deployment
+# Odoo 20 Dockerized Deployment
 
-This project provides a simple Docker Compose setup for **Odoo 19** with **PostgreSQL** and **pgAdmin** for development or testing purposes.
+This project provides a simple Docker Compose setup for **Odoo 20** with **PostgreSQL** and **pgAdmin** for development or testing purposes.
 
 ---
 
 ## Project Structure
 
 ```
-odoo19e/
+odoo20/
 ├── custom_addons/          # Create manually for custom Odoo modules
 ├── Dockerfile              # Odoo image with dependencies
 ├── entrypoint.sh           # Startup script for Odoo
@@ -26,8 +26,8 @@ odoo19e/
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/AungMoeWai1/odoo19e.git
-cd odoo19e
+git clone https://github.com/AungMoeWai1/odoo20.git
+cd odoo20
 ```
 
 ### 2. Create custom addons folder
@@ -98,7 +98,7 @@ make push    # Push to Docker Hub
 
 ## Kubernetes Deployment
 
-Below is a simple Kubernetes setup to run Odoo 19 + PostgreSQL using Deployments, Services, and Persistent Volumes.
+Below is a simple Kubernetes setup to run Odoo 20 + PostgreSQL using Deployments, Services, and Persistent Volumes.
 
 ![alt text](image.png)
 
@@ -107,8 +107,8 @@ Below is a simple Kubernetes setup to run Odoo 19 + PostgreSQL using Deployments
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/AungMoeWai1/odoo19e.git
-cd odoo19e
+git clone https://github.com/AungMoeWai1/odoo20.git
+cd odoo20
 ```
 
 ### 2. Create custom addons folder

@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
 
   odoo:
-    image: aungmoewai/odoo20e:latest
+    image: aungmoewai/odoo20:latest
     stdin_open: true
     tty: true
     env_file: myenvfile.env
