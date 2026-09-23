@@ -7,9 +7,8 @@ OUTPUT="odoo.tar.gz"
 echo "Downloading odoo source from Google Drive..."
 echo "File ID: $FILE_ID"
 
-# Handle Google Drive's "virus scan" confirmation for files >100MB
 COOKIE_FILE=$(mktemp)
-curl -sc "$COOKIE_FILE" "https://drive.google.com/uc?export=download&id=${FILE_ID}" > /dev/null
+curl -scL "$COOKIE_FILE" "https://drive.google.com/uc?export=download&id=${FILE_ID}" > /dev/null
 
 CONFIRM=$(grep -oP 'confirm=\K[^&]+' "$COOKIE_FILE" || true)
 
@@ -22,7 +21,6 @@ else
     curl -L "https://drive.google.com/uc?export=download&id=${FILE_ID}" -o "$OUTPUT"
 fi
 
-# Verify it's a valid gzip
 if ! file "$OUTPUT" | grep -q "gzip"; then
     echo "ERROR: Downloaded file is not gzip. Google Drive may have returned an HTML error page."
     head -c 500 "$OUTPUT"
